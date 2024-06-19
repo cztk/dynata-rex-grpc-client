@@ -1,0 +1,20 @@
+[Unit]
+Description=grpc listener for dynata-rex api, providing data on local socket
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+Restart=always
+RestartSec=5
+User=root
+PIDFile=/usr/local/run/dynata-rex-grpc-client/dynata-rex-grpc-client.pid
+ExecStart=/usr/local/bin/dynata-rex-grpc-client -c /etc/dynata-rex-grpc-client/server.conf -d
+ExecReload=/bin/kill -HUP $MAINPID
+
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=dynata-rex-grpc-client
+
+[Install]
+WantedBy=multi-user.target
